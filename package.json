@@ -1,5 +1,5 @@
 {
-  "name": "comlink",
+  "name": "@nobidev/comlink",
   "version": "4.4.2",
   "description": "Comlink makes WebWorkers enjoyable",
   "main": "dist/umd/comlink.js",
@@ -18,12 +18,12 @@
     "watchtest": "CHROME_ONLY=1 karma start --no-single-run"
   },
   "author": {
-    "name": "Surma",
-    "email": "surma@google.com"
+    "name": "Nobi",
+    "email": "nobi@nobidev.com"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/GoogleChromeLabs/comlink.git"
+    "url": "https://github.com/nobidev/comlink.git"
   },
   "license": "Apache-2.0",
   "devDependencies": {
