@@ -21,7 +21,11 @@ export interface NodeEndpoint {
   start?: () => void;
 }
 
-export default function nodeEndpoint(nep: NodeEndpoint): Endpoint {
+export default function nodeEndpoint(nep: Endpoint | NodeEndpoint): Endpoint {
+  if ("addEventListener" in nep) {
+    return nep;
+  }
+
   const listeners = new WeakMap();
   return {
     postMessage: nep.postMessage.bind(nep),

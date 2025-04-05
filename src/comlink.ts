@@ -13,6 +13,8 @@ import {
   WireValue,
   WireValueType,
 } from "./protocol";
+import nodeEndpoint, { NodeEndpoint } from "./node-adapter";
+
 export type { Endpoint };
 
 export const proxyMarker = Symbol("Comlink.proxy");
@@ -296,9 +298,10 @@ function isAllowedOrigin(
 
 export function expose(
   obj: any,
-  ep: Endpoint = globalThis as any,
+  epOrNep: Endpoint | NodeEndpoint = globalThis as any,
   allowedOrigins: (string | RegExp)[] = ["*"]
 ) {
+  const ep = nodeEndpoint(epOrNep);
   ep.addEventListener("message", function callback(ev: MessageEvent) {
     if (!ev || !ev.data) {
       return;
@@ -395,8 +398,12 @@ function closeEndPoint(endpoint: Endpoint) {
   if (isMessagePort(endpoint)) endpoint.close();
 }
 
-export function wrap<T>(ep: Endpoint, target?: any): Remote<T> {
-  const pendingListeners : PendingListenersMap = new Map();
+export function wrap<T>(
+  epOrNep: Endpoint | NodeEndpoint,
+  target?: any
+): Remote<T> {
+  const ep = nodeEndpoint(epOrNep);
+  const pendingListeners: PendingListenersMap = new Map();
 
   ep.addEventListener("message", function handleMessage(ev: Event) {
     const { data } = ev as MessageEvent;
@@ -634,7 +641,7 @@ function requestResponseMessage(
       ep.start();
     }
     ep.postMessage({ id, ...msg }, transfers);
-});
+  });
 }
 
 function generateUUID(): string {
